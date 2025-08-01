@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Map Admin Panel</title>
+    <meta name="description" content="Administrative dashboard for Campus Map management">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="PPT/logo_c1.png">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="admin-navbar">
+        <div class="navbar-left">
+            <h1>Campus Map Admin</h1>
+        </div>
+        <div class="navbar-right">
+            <div class="admin-user">
+                <span class="admin-name">👤 Administrator</span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <nav class="sidebar-nav">
+                <a href="#" data-section="dashboard" class="nav-item active">
+                    <span class="nav-icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="#" data-section="locations" class="nav-item">
+                    <span class="nav-icon">📍</span>
+                    Locations
+                </a>
+                <a href="#" data-section="buildings" class="nav-item">
+                    <span class="nav-icon">🏢</span>
+                    Buildings
+                </a>
+                <a href="#" data-section="users" class="nav-item">
+                    <span class="nav-icon">👥</span>
+                    User Analytics
+                </a>
+                <a href="#" data-section="system" class="nav-item">
+                    <span class="nav-icon">⚙️</span>
+                    System Settings
+                </a>
+                <a href="#" data-section="backups" class="nav-item">
+                    <span class="nav-icon">💾</span>
+                    Data Management
+                </a>
+                <a href="#" data-section="logs" class="nav-item">
+                    <span class="nav-icon">📄</span>
+                    Activity Logs
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="admin-main">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="section-header">
+                    <h2>📊 Dashboard Overview</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="refreshDashboard()">🔄 Refresh</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <h3>Active Users</h3>
+                            <p class="stat-number" id="total-users">0</p>
+                            <span class="stat-change positive">+12% this week</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📍</div>
+                        <div class="stat-info">
+                            <h3>Total Locations</h3>
+                            <p class="stat-number" id="total-locations">0</p>
+                            <span class="stat-change positive">+3 new</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔍</div>
+                        <div class="stat-info">
+                            <h3>Search Queries</h3>
+                            <p class="stat-number" id="total-searches">0</p>
+                            <span class="stat-change neutral">Today</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏢</div>
+                        <div class="stat-info">
+                            <h3>Buildings</h3>
+                            <p class="stat-number" id="total-buildings">0</p>
+                            <span class="stat-change positive">All active</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-charts">
+                    <div class="chart-container">
+                        <h3>📈 Usage Analytics</h3>
+                        <div class="chart-placeholder">
+                            <div class="chart-bar" style="height: 60%"></div>
+                            <div class="chart-bar" style="height: 80%"></div>
+                            <div class="chart-bar" style="height: 45%"></div>
+                            <div class="chart-bar" style="height: 90%"></div>
+                            <div class="chart-bar" style="height: 75%"></div>
+                            <div class="chart-bar" style="height: 65%"></div>
+                            <div class="chart-bar" style="height: 85%"></div>
+                        </div>
+                        <div class="chart-labels">
+                            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-activity">
+                        <h3>🕐 Recent Activity</h3>
+                        <div class="activity-list" id="recent-activity">
+                            <!-- Activity items will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Locations Management Section -->
+            <section id="locations" class="section">
+                <div class="section-header">
+                    <h2>📍 Location Management</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="showAddLocationModal()">+ Add Location</button>
+                        <button class="btn btn-secondary" onclick="exportLocations()">📤 Export</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-filters">
+                        <input type="text" placeholder="Search locations..." id="location-search">
+                        <select id="location-status-filter">
+                            <option value="all">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Coordinates</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="locations-table-body">
+                            <!-- Data populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Buildings Management Section -->
+            <section id="buildings" class="section">
+                <div class="section-header">
+                    <h2>🏢 Building Management</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="showAddBuildingModal()">+ Add Building</button>
+                        <button class="btn btn-secondary" onclick="exportBuildings()">📤 Export</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-filters">
+                        <input type="text" placeholder="Search buildings..." id="building-search">
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Coordinates</th>
+                                <th>Facilities</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="buildings-table-body">
+                            <!-- Data populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- User Analytics Section -->
+            <section id="users" class="section">
+                <div class="section-header">
+                    <h2>👥 User Analytics</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-secondary" onclick="exportUserData()">📤 Export Data</button>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>🔍 Popular Searches</h3>
+                        <div class="search-list" id="popular-searches">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <h3>⭐ Favorite Locations</h3>
+                        <div class="favorites-list" id="favorite-locations">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <h3>📱 Usage Patterns</h3>
+                        <div class="usage-stats">
+                            <div class="usage-item">
+                                <span>Peak Usage Time:</span>
+                                <strong>10:00 AM - 2:00 PM</strong>
+                            </div>
+                            <div class="usage-item">
+                                <span>Most Active Day:</span>
+                                <strong>Monday</strong>
+                            </div>
+                            <div class="usage-item">
+                                <span>Average Session:</span>
+                                <strong>3.5 minutes</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- System Settings Section -->
+            <section id="system" class="section">
+                <div class="section-header">
+                    <h2>⚙️ System Settings</h2>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <h3>🎨 Appearance</h3>
+                        <div class="setting-item">
+                            <label>Default Map Theme</label>
+                            <select id="default-theme">
+                                <option value="streets">Streets</option>
+                                <option value="satellite">Satellite</option>
+                                <option value="dark">Dark Mode</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Enable Animations</label>
+                            <input type="checkbox" id="enable-animations" checked>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3>🔧 Functionality</h3>
+                        <div class="setting-item">
+                            <label>Max Search Results</label>
+                            <input type="number" id="max-search-results" value="10" min="5" max="50">
+                        </div>
+                        <div class="setting-item">
+                            <label>Auto-save User Preferences</label>
+                            <input type="checkbox" id="auto-save" checked>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3>🔒 Security</h3>
+                        <div class="setting-item">
+                            <label>Change Admin Password</label>
+                            <button class="btn btn-warning" onclick="changePassword()">Change Password</button>
+                        </div>
+                        <div class="setting-item">
+                            <label>Session Timeout (minutes)</label>
+                            <input type="number" id="session-timeout" value="30" min="15" max="120">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-actions">
+                    <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+                    <button class="btn btn-secondary" onclick="resetSettings()">🔄 Reset to Default</button>
+                </div>
+            </section>
+
+            <!-- Data Management Section -->
+            <section id="backups" class="section">
+                <div class="section-header">
+                    <h2>💾 Data Management</h2>
+                </div>
+
+                <div class="backup-grid">
+                    <div class="backup-card">
+                        <h3>📥 Import Data</h3>
+                        <p>Import locations and buildings from JSON file</p>
+                        <input type="file" id="import-file" accept=".json" style="display: none;">
+                        <button class="btn btn-primary" onclick="document.getElementById('import-file').click()">Choose File</button>
+                    </div>
+
+                    <div class="backup-card">
+                        <h3>📤 Export Data</h3>
+                        <p>Export all system data to JSON format</p>
+                        <button class="btn btn-success" onclick="exportAllData()">Export All Data</button>
+                    </div>
+
+                    <div class="backup-card">
+                        <h3>🗑️ Clear Data</h3>
+                        <p>Clear user search history and favorites</p>
+                        <button class="btn btn-danger" onclick="clearUserData()">Clear User Data</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity Logs Section -->
+            <section id="logs" class="section">
+                <div class="section-header">
+                    <h2>📄 Activity Logs</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-secondary" onclick="clearLogs()">🗑️ Clear Logs</button>
+                    </div>
+                </div>
+
+                <div class="logs-container">
+                    <div class="logs-filters">
+                        <select id="log-type-filter">
+                            <option value="all">All Types</option>
+                            <option value="user">User Actions</option>
+                            <option value="system">System Events</option>
+                            <option value="error">Errors</option>
+                        </select>
+                        <input type="date" id="log-date-filter">
+                    </div>
+                    
+                    <div class="logs-list" id="activity-logs">
+                        <!-- Logs populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Modals will be dynamically created by JavaScript -->
+
+    <script src="admin.js"></script>
+</body>
+</html>

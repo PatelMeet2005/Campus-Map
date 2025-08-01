@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGP1 Project Test & Debug</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .warning { background: #fff3cd; color: #856404; }
+        .test-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-btn:hover {
+            background: #2980b9;
+        }
+        ul { margin: 10px 0; }
+        a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .debug-output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 SGP1-Main Project - Test & Debug Page</h1>
+    
+    <div class="test-section">
+        <h2>📁 Project Status <span class="status success">✓ Ready</span></h2>
+        <p>Main application: <a href="project.html">Open project.html</a></p>
+        <p>Admin panel: <a href="admin.html">Open admin.html</a></p>
+    </div>
+
+    <div class="test-section">
+        <h2>🧪 Quick Function Tests</h2>
+        <p>Test the main functionality without opening the full map:</p>
+        
+        <button class="test-btn" onclick="testToast()">Test Toast Notification</button>
+        <button class="test-btn" onclick="testLocalStorage()">Test Local Storage</button>
+        <button class="test-btn" onclick="testSearchHistory()">Test Search History</button>
+        <button class="test-btn" onclick="clearTestData()">Clear Test Data</button>
+        
+        <div id="debug-output" class="debug-output">
+            Debug output will appear here...
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔍 Common Issues & Solutions</h2>
+        <ul>
+            <li><strong>Settings dropdown not working:</strong> Check browser console for JavaScript errors</li>
+            <li><strong>Map not loading:</strong> Ensure internet connection for map tiles</li>
+            <li><strong>Location not found:</strong> Allow location access in browser</li>
+            <li><strong>Search not working:</strong> Try typing full location names</li>
+            <li><strong>Mobile view issues:</strong> Test with browser dev tools mobile view</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>📱 Mobile Testing</h2>
+        <p>To test mobile functionality:</p>
+        <ol>
+            <li>Open browser developer tools (F12)</li>
+            <li>Toggle device toolbar (Ctrl+Shift+M)</li>
+            <li>Select a mobile device preset</li>
+            <li>Test touch interactions and responsive design</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🛠️ Debug Information</h2>
+        <p><strong>Browser:</strong> <span id="browser-info"></span></p>
+        <p><strong>Screen Size:</strong> <span id="screen-info"></span></p>
+        <p><strong>Local Storage Available:</strong> <span id="storage-info"></span></p>
+        <p><strong>Geolocation Available:</strong> <span id="geo-info"></span></p>
+    </div>
+
+    <script>
+        // Simple test functions
+        function debugLog(message) {
+            const output = document.getElementById('debug-output');
+            const timestamp = new Date().toLocaleTimeString();
+            output.innerHTML += `[${timestamp}] ${message}\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function testToast() {
+            debugLog('Testing toast notification...');
+            // Simple toast implementation for testing
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed; top: 20px; right: 20px; 
+                background: #27ae60; color: white; 
+                padding: 10px 20px; border-radius: 4px;
+                z-index: 10000; transition: all 0.3s ease;
+            `;
+            toast.textContent = 'Test toast notification!';
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.transform = 'translateX(400px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+            
+            debugLog('✓ Toast test completed');
+        }
+
+        function testLocalStorage() {
+            debugLog('Testing local storage...');
+            try {
+                localStorage.setItem('test', 'value');
+                const value = localStorage.getItem('test');
+                localStorage.removeItem('test');
+                debugLog(`✓ Local storage working: ${value}`);
+            } catch (e) {
+                debugLog(`✗ Local storage error: ${e.message}`);
+            }
+        }
+
+        function testSearchHistory() {
+            debugLog('Testing search history simulation...');
+            try {
+                const testHistory = ['Canteen', 'Library', 'Admin Office'];
+                localStorage.setItem('searchHistory', JSON.stringify(testHistory));
+                const retrieved = JSON.parse(localStorage.getItem('searchHistory'));
+                debugLog(`✓ Search history test: ${retrieved.join(', ')}`);
+            } catch (e) {
+                debugLog(`✗ Search history error: ${e.message}`);
+            }
+        }
+
+        function clearTestData() {
+            debugLog('Clearing test data...');
+            localStorage.removeItem('searchHistory');
+            localStorage.removeItem('favoriteLocations');
+            localStorage.removeItem('mapTheme');
+            debugLog('✓ Test data cleared');
+        }
+
+        // Initialize debug info
+        window.addEventListener('load', function() {
+            document.getElementById('browser-info').textContent = navigator.userAgent.split(' ').pop();
+            document.getElementById('screen-info').textContent = `${screen.width}x${screen.height}`;
+            document.getElementById('storage-info').textContent = typeof(Storage) !== "undefined" ? 'Yes' : 'No';
+            document.getElementById('geo-info').textContent = navigator.geolocation ? 'Yes' : 'No';
+            
+            debugLog('Debug page loaded successfully');
+            debugLog('Ready for testing...');
+        });
+    </script>
+</body>
+</html>

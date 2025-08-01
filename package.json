@@ -1,0 +1,60 @@
+{
+  "name": "sgp1-college-map",
+  "version": "2.0.0",
+  "description": "Enhanced interactive campus navigation system for CHARUSAT University",
+  "main": "project.html",
+  "keywords": [
+    "college-map",
+    "navigation",
+    "leaflet",
+    "campus",
+    "interactive-map",
+    "charusat"
+  ],
+  "author": "SGP1 Team",
+  "license": "MIT",
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12",
+    "leaflet-control-geocoder": "^2.4.0"
+  },
+  "scripts": {
+    "start": "Live Server or similar local server",
+    "build": "No build process required - static files",
+    "deploy": "Upload to web server"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "Local repository"
+  },
+  "features": [
+    "Interactive campus map",
+    "GPS navigation and routing",
+    "Search with autocomplete",
+    "Favorite locations",
+    "Search history",
+    "Multiple map styles",
+    "Mobile responsive design",
+    "Admin panel for management",
+    "Quick access panel",
+    "Toast notifications",
+    "Building information system"
+  ],
+  "improvements": {
+    "v2.0.0": [
+      "Enhanced UI/UX with modern design system",
+      "Improved error handling and user feedback",
+      "Mobile responsiveness improvements",
+      "Code organization and performance optimizations",
+      "Added favorite locations and search history",
+      "Better accessibility features",
+      "Loading states and animations",
+      "Enhanced building information system"
+    ]
+  }
+}
